@@ -1,0 +1,6 @@
+{
+  "baseUrl": "https://todomvc.com/examples/vanillajs/",
+  "timeout": 20,
+  "screenshot_dir": "/screenshots",
+  "browser": "chrome"
+}
