@@ -1,9 +1,7 @@
 {
-  "driverPath": {
-    "chrome": "drivers/chromedriver"
-  },
   "driverArgs": [
     "--disable-extensions",
-    "--disable-gpu"
+    "--disable-gpu",
+    "--headless"
   ]
 }

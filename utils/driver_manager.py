@@ -25,6 +25,5 @@ class Driver(metaclass=DriverManager):
                 self.options = Options()
             for argument in driver_settings["driverArgs"]:
                 self.options.add_argument(argument)
-            driver_path = driver_settings['driverPath']['chrome']
         self.connection = webdriver.Chrome(options=self.options)
         return self.connection
