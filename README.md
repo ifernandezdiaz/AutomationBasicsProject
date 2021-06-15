@@ -7,6 +7,8 @@ Proyecto final del curso Automation Basics para Spark Digital La idea es que tod
 
 Este framework está pronto para utilizar. El mismo contiene un framework ya configurado y funcional, pronto para comenzar el proyecto de automatización de la web automationpractice.com
 
+
+
 ### Precondiciones
 
 #### Chromedriver
@@ -25,13 +27,24 @@ En este proyecto ya no usaremos un ejecutable dentro del proyecto sino que usare
 	-	Luego de instalado ejecutar `choco install chromedriver`
 	-	Para confirmar que la instalación funcionó correctamente ejecutar `chromedriver -version`
 
+#### HTMLTestRunner
+
+Ahora nosotros generaremos un reporte en HTML para cada ejecución creada. Debemos importar la librería de HTMLTestRunner para evitar errores
+
+```pip install html-testRunner```
+
+
 ### Agregar nuevos tests
 
 Para agregar nuevos tests, deben crear un nuevo test file dentro de la carpeta `tests`. Cada test debe heredar de la clase `BaseTest`
 
+
+
 ### Agregar nuevos page objects
 
 La clase 'BasePage' ofrece métodos muy útiles para el manejo de los page objects. Al momento de crear un nuevo page object, el mismo debe heredar de esta clase.
+
+
 
 ### Cómo ejecutar los tests?
 
@@ -40,6 +53,8 @@ Ejecutar desde consola (posicionados dentro de la carpeta del proyecto):
 `python3 run_tests.py` -> Para Python 3+
 
 `python run_tests.py` -> Para Python 2
+
+
 
 ### Posibles errores
 
