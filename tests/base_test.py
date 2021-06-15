@@ -1,3 +1,4 @@
+import HtmlTestRunner
 import json
 import os
 import shutil
@@ -32,13 +33,3 @@ class BaseTest(unittest.TestCase):
         self.__screenshot_path = os.getcwd() + test_config['screenshot_dir']
         shutil.rmtree(self.__screenshot_path)
         os.mkdir(self.__screenshot_path)
-
-
-if __name__ == "__main__":
-    # Definimos la ejecución de los tests aquí para excluirla de los test files
-    test_suite = unittest.TestLoader().loadTestsFromTestCase()
-    # Pueden configurar el tipo de log que quieren generar:
-    # verbosity=0 -> Sin log (Loguea solo el resultado final)
-    # verbosity=1 -> Lista solo el result de cada test
-    # verbosity=2 -> Log mas detallado para cada test
-    unittest.TextTestRunner(verbosity=1).run(test_suite)
