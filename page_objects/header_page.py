@@ -11,4 +11,4 @@ class HeaderPage(BasePage):
         self.phone_location = (By.CSS_SELECTOR, '.shop-phone > strong')
 
     def get_phone(self):
-        return self.find_element(*self.phone_location)
+        return self.find_element(*self.phone_location).text
