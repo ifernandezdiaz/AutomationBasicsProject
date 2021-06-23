@@ -5,14 +5,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException
+from config.config_helper import load_test_config_json
+
 
 class BasePage:
+
     def __init__(self, driver):
-        with open(os.getcwd() + '/config/test_config.json') as test_config_file:
-            test_settings = json.load(test_config_file)
-            test_config_file.close()
+        test_settings = load_test_config_json()
         self.driver = driver
-        self.timeout = test_settings['timeout']
+        self.time_list = test_settings['timeout_list']
 
     def open_url(self, url):
         self.driver.open(url)
@@ -23,19 +25,31 @@ class BasePage:
     def find_element(self, *element_locator):
         return self.driver.find_element(*element_locator)
 
-    def wait_element(self, *element_locator):
+    def wait_element_to_be_present(self, *element_locator, time):
         try:
-            WebDriverWait(self.driver, self.timeout).until(EC.presence_of_element_located(element_locator))
+            WebDriverWait(self.driver, time).until(
+                EC.presence_of_element_located(*element_locator))
         except TimeoutException:
             print('Element not found: ' + element_locator[1])
 
-    def wait_and_click(self, *element_locator):
-        self.wait_element(*element_locator)
+    def wait_for_element_to_be_visible(self, *element_locator, time):
+        try:
+            WebDriverWait(self.driver, time).until(
+                EC.visibility_of_element_located(*element_locator))
+        except TimeoutException:
+            print('Element was not visible: ' + element_locator[1])
+
+    def click_element(self, *element_locator):
         element = self.find_element(*element_locator)
         element.click()
-        return element
 
-    def type_text(self, text, *element_locator):
+    def wait_and_click(self, *element_locator, time=30):
+        self.wait_for_element_to_be_visible(*element_locator, time)
+        element = self.find_element(*element_locator)
+        element.click()
+
+    def type_text(self, text, *element_locator, enter=True):
         input = self.wait_and_click(*element_locator)
         input.send_keys(text)
-        input.send_keys(Keys.ENTER)
+        if enter:
+            input.send_keys(Keys.ENTER)
