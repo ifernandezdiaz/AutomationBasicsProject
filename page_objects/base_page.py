@@ -25,14 +25,14 @@ class BasePage:
     def find_element(self, *element_locator):
         return self.driver.find_element(*element_locator)
 
-    def wait_element_to_be_present(self, *element_locator, time):
+    def wait_element_to_be_present(self, time, *element_locator):
         try:
             WebDriverWait(self.driver, time).until(
                 EC.presence_of_element_located(*element_locator))
         except TimeoutException:
             print('Element not found: ' + element_locator[1])
 
-    def wait_for_element_to_be_visible(self, *element_locator, time):
+    def wait_for_element_to_be_visible(self, time, *element_locator):
         try:
             WebDriverWait(self.driver, time).until(
                 EC.visibility_of_element_located(*element_locator))
@@ -43,12 +43,12 @@ class BasePage:
         element = self.find_element(*element_locator)
         element.click()
 
-    def wait_and_click(self, *element_locator, time=30):
+    def wait_and_click(self, time = 30, *element_locator):
         self.wait_for_element_to_be_visible(*element_locator, time)
         element = self.find_element(*element_locator)
         element.click()
 
-    def type_text(self, text, *element_locator, enter=True):
+    def type_text(self, text, enter=True, *element_locator):
         input = self.wait_and_click(*element_locator)
         input.send_keys(text)
         if enter:

@@ -9,5 +9,5 @@ class HomePage(BasePage):
 
 
     def click_sign_in(self, time):
-        self.wait_for_element_to_be_visible(*self.btn_sign_in, time)
+        self.wait_for_element_to_be_visible(time, *self.btn_sign_in,)
         self.click_element(self.btn_sign_in)
