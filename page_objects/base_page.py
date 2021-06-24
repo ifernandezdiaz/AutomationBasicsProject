@@ -23,6 +23,9 @@ class BasePage:
     def find_element(self, *element_locator):
         return self.driver.find_element(*element_locator)
 
+    def find_elements(self, *element_locator):
+        return self.driver.find_elements(*element_locator)
+
     def wait_element(self, *element_locator):
         try:
             WebDriverWait(self.driver, self.timeout).until(EC.presence_of_element_located(element_locator))
