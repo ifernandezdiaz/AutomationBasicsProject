@@ -2,7 +2,6 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from page_objects.base_page import BasePage
-from selenium.webdriver.common.action_chains import ActionChains
 
 
 class BodyPage(BasePage):
@@ -24,9 +23,6 @@ class BodyPage(BasePage):
         a = ActionChains(self.driver)
         a.move_to_element(card).perform()
 
-    def hover_over(self): #este metodo devuelve una instancia de ActionChains para poder hacer hover sobre algún elemento
-        return ActionChains(self.driver)
-
     def get_button_name(self):
         self.find_element(*self.add_to_cart)
         self.wait_element(*self.add_to_cart)
@@ -40,60 +36,65 @@ class BodyPage(BasePage):
         self.wait_element(*self.cart_amount)
         return self.find_element(*self.cart_amount).text
 
-    def getMenuElements(self): #este método devuelve todos los elementos del menú
+    def get_menu_elements(self): #este método devuelve todos los elementos del menú
         return self.find_elements(*self.menu_elements)
 
-    def getMenuElementByTitle(self,m_title): #este método devuelve dinámicamente un elemento del menú según el título que se pase por parámetro
-        elements = self.getMenuElements()
+    def get_menu_element_by_title(self,m_title): #este método devuelve dinámicamente un elemento del menú según el título que se pase por parámetro
+        elements = self.get_menu_elements()
         menuelement = None
         for elem in elements:
             if elem.find_element(By.CSS_SELECTOR,'a').get_attribute("title")==m_title:
                 menuelement = elem
         return menuelement
 
-    def getSubMenuElements(self,m_title): #este método devuelve dinámicamente los subelementos del elemento del menu que se pase por parámetro
-        return self.getMenuElementByTitle(m_title).find_elements(*self.submenu_elements)
+    def get_sub_menu_elements(self,m_title): #este método devuelve dinámicamente los subelementos del elemento del menu que se pase por parámetro
+        return self.get_menu_element_by_title(m_title).find_elements(*self.submenu_elements)
 
     #este método devuelve dinámicamente un subelemento del elemento del menu
     #segun el subelemento y el elemento que se pasen por parámetro
-    def getSubMenuElementByTitle(self,m_title,sm_title):
-        sm_elements = self.getSubMenuElements(m_title)
+    def get_sub_menu_element_by_title(self,m_title,sm_title):
+        sm_elements = self.get_sub_menu_elements(m_title)
         sub_element = None
         for elem in sm_elements:
             try:
                 if elem.find_element(By.CSS_SELECTOR,'a').get_attribute("title")==sm_title:
                     sub_element = elem
             except:
-                break
+                continue
         return sub_element
 
-        #este método devuelve dinámicamente los items del subelemento del menu
-        #segun el subelemento y el elemento que se pasen por parámetro
-    def getSubMenuItems(self,m_title,sm_title):
-        return self.getSubMenuElementByTitle(m_title,sm_title).find_elements(*self.submenu_items)
+    #este método devuelve dinámicamente los items del subelemento del menu
+    #segun el subelemento y el elemento que se pasen por parámetro
+    def get_sub_menu_items(self,m_title,sm_title):
+        return self.get_sub_menu_element_by_title(m_title,sm_title).find_elements(*self.submenu_items)
+
+    #este metodo identifica un item del menu según su el valor del atributo titulo
+    def compara_menuitem_por_atributo_titulo(elem,it_title):
+        try:
+            if elem.find_element(By.CSS_SELECTOR,'a').get_attribute("title")==it_title:
+                return True
+            else:
+                return False
+        except:
+            pass
 
     #este método devuelve dinámicamente un item del subelemento del menu
     #segun el subelemento, el elemento y el item que se pasen por parámetro
-    def getSubMenuItemByTitle(self,m_title,sm_title,it_title):
-        sm_items = self.getSubMenuItems(m_title,sm_title)
-        sm_item = None
-        for elem in sm_items:
-            try:
-                if elem.find_element(By.CSS_SELECTOR,'a').get_attribute("title")==it_title:
-                    sm_item = elem
-            except:
-                break
+    def get_sub_menu_item_by_title(self,m_title,sm_title,it_title):
+        sm_items = self.get_sub_menu_items(m_title,sm_title)
+        sm_item = list(filter(lambda elem: BodyPage.compara_menuitem_por_atributo_titulo(elem,it_title),sm_items))
         return sm_item
 
     #este método devuelve el titulo del item Evening Dreses del subelemento del menu Dresess, del elemento del menu Women
-    def getWomenDressesEveningDressesItem(self):
-        return self.getSubMenuItemByTitle('Women','Dresses','Evening Dresses').find_element(By.CSS_SELECTOR,'a').get_attribute("title")
+    def get_women_dresses_evening_dresses_item(self):
+        return self.get_sub_menu_item_by_title('Women','Dresses','Evening Dresses')[0].find_element(By.CSS_SELECTOR,'a').get_attribute("title")
 
     #este método desplaza el mouse y hace click sobre el item Evening Dreses del subelemento del menu Dresess, del elemento del menu Women
-    def clickWomenDressesEveningDressesItem(self):
-        self.hover_over().move_to_element(self.getMenuElementByTitle('Women')).move_to_element(self.getSubMenuItemByTitle('Women','Dresses','Evening Dresses')).click().perform()
+    def click_women_dresses_evening_dresses_item(self):
+        #el metodo hover_over es privado y por eso se invoca asi: _BasePage__hover_over
+        self._BasePage__hover_over().move_to_element(self.get_menu_element_by_title('Women')).move_to_element(self.get_sub_menu_item_by_title('Women','Dresses','Evening Dresses')[0]).click().perform()
         self.wait_element(*self.product_list_grid)
 
     #este método cuenta la cantidad de items que existen en la grilla de productos
-    def getgridListCount(self):
+    def get_grid_list_count(self):
         return len(self.find_elements(*self.product_list_grid))
