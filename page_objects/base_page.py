@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.action_chains import ActionChains
 
 class BasePage:
     def __init__(self, driver):
@@ -14,6 +15,9 @@ class BasePage:
         self.driver = driver
         self.timeout = test_settings['timeout']
 
+    def __hover_over(self): #este metodo devuelve una instancia de ActionChains para poder hacer hover sobre algún elemento
+        return ActionChains(self.driver)
+
     def open_url(self, url):
         self.driver.open(url)
 
@@ -22,6 +26,9 @@ class BasePage:
 
     def find_element(self, *element_locator):
         return self.driver.find_element(*element_locator)
+
+    def find_elements(self, *element_locator):
+        return self.driver.find_elements(*element_locator)
 
     def wait_element(self, *element_locator):
         try:
