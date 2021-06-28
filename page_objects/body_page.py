@@ -16,6 +16,11 @@ class BodyPage(BasePage):
         self.submenu_elements = (By.CSS_SELECTOR,'ul>li')
         self.submenu_items = (By.CSS_SELECTOR,'ul>li')
         self.product_list_grid = (By.CSS_SELECTOR,'.product_list')
+        self.main_page_popular_products = (By.CSS_SELECTOR,'#homefeatured > li.ajax_block_product')
+        self.main_page_best_seller_tab = (By.CSS_SELECTOR,'#home-page-tabs .blockbestsellers')
+        self.main_page_best_seller_product_list = (By.CSS_SELECTOR,'#blockbestsellers.product_list')
+        self.main_page_best_seller_product_list_items = (By.CSS_SELECTOR,'#blockbestsellers > li.ajax_block_product .product-container .right-block > h5 > a')
+        self.product_detail = (By.CSS_SELECTOR,'.primary_block .pb-center-column > h1')
 
     def hover_card(self):
         card = self.find_element(*self.card)
@@ -98,3 +103,29 @@ class BodyPage(BasePage):
     #este método cuenta la cantidad de items que existen en la grilla de productos
     def get_grid_list_count(self):
         return len(self.find_elements(*self.product_list_grid))
+
+    def get_popular_product_from_main_page(self,it_title):
+        popular_prods = self.find_elements(*self.main_page_popular_products)
+        pop_prod = list(filter(lambda elem: BodyPage.compara_menuitem_por_atributo_titulo(elem,it_title),popular_prods))
+        return pop_prod
+
+    def get_printed_summerdress_from_main_page(self):
+        return self.get_popular_product_from_main_page('Printed Summer Dress')[0].find_element(By.CSS_SELECTOR,'a').get_attribute("title")
+
+    def get_not_so_strange_dress_from_main_page(self):
+        return len(self.get_popular_product_from_main_page('Not so Strange Dress'))
+
+    def click_best_sellers_tab(self):
+        self.find_element(*self.main_page_best_seller_tab).click()
+        self.wait_element(*self.main_page_best_seller_product_list)
+        return len(self.find_elements(*self.main_page_best_seller_product_list_items))
+
+    def get_best_seller_product_name(self, item):
+        return self.find_elements(*self.main_page_best_seller_product_list_items)[item].get_attribute("title")
+
+    def click_best_seller_product(self,item):
+        self.find_elements(*self.main_page_best_seller_product_list_items)[item].click()
+        self.wait_element(*self.product_detail)
+
+    def get_product_detail_name(self):
+        return self.find_element(*self.product_detail).text
