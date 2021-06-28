@@ -120,12 +120,12 @@ class BodyPage(BasePage):
         self.wait_element(*self.main_page_best_seller_product_list)
         return len(self.find_elements(*self.main_page_best_seller_product_list_items))
 
-    def get_best_seller_product_name(self, item):
-        return self.find_elements(*self.main_page_best_seller_product_list_items)[item].get_attribute("title")
-
     def click_best_seller_product(self,item):
-        self.find_elements(*self.main_page_best_seller_product_list_items)[item].click()
+        product = self.find_elements(*self.main_page_best_seller_product_list_items)[item]
+        name = product.get_attribute("title")
+        product.click()
         self.wait_element(*self.product_detail)
+        return name
 
     def get_product_detail_name(self):
         return self.find_element(*self.product_detail).text
