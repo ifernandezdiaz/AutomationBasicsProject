@@ -1,5 +1,6 @@
 import json
 import os
+import logging
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -32,19 +33,19 @@ class BasePage:
         except TimeoutException:
             print('Element not found: ' + element_locator[1])
 
-    def wait_for_element_to_be_visible(self, time, *element_locator):
+    def wait_for_element_to_be_visible(self, time, element_locator):
         try:
             WebDriverWait(self.driver, time).until(
-                EC.visibility_of_element_located(*element_locator))
+                EC.visibility_of_element_located(element_locator))
         except TimeoutException:
             print('Element was not visible: ' + element_locator[1])
 
-    def click_element(self, *element_locator):
+    def click_element(self, element_locator):
         element = self.find_element(*element_locator)
         element.click()
 
     def wait_and_click(self, time = 30, *element_locator):
-        self.wait_for_element_to_be_visible(*element_locator, time)
+        self.wait_for_element_to_be_visible(time, *element_locator)
         element = self.find_element(*element_locator)
         element.click()
 

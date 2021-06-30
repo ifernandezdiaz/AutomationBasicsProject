@@ -5,4 +5,4 @@ class LoginTest(BaseTest):
 
     def test_login(self):
         home_page = HomePage(self.driver)
-        home_page.click_sign_in(self.time_list["very_low"])
+        home_page.click_sign_in(self.time_list['very_low'])

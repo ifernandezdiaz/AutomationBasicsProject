@@ -1,7 +1,6 @@
 {
   "driverArgs": [
     "--disable-extensions",
-    "--disable-gpu",
-    "--headless"
+    "--disable-gpu"
   ]
 }
