@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoSuchElementException
 from config.config_helper import load_test_config_json
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 class BasePage:
@@ -17,6 +18,9 @@ class BasePage:
         self.driver = driver
         self.time_list = test_settings['timeout_list']
 
+    def __hover_over(self): #este metodo devuelve una instancia de ActionChains para poder hacer hover sobre algún elemento
+        return ActionChains(self.driver)
+
     def open_url(self, url):
         self.driver.open(url)
 
@@ -25,6 +29,9 @@ class BasePage:
 
     def find_element(self, *element_locator):
         return self.driver.find_element(*element_locator)
+
+    def find_elements(self, *element_locator):
+        return self.driver.find_elements(*element_locator)
 
     def wait_element_to_be_present(self, time, *element_locator):
         try:
