@@ -6,8 +6,8 @@ import unittest
 import platform
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from utils.driver_manager import Driver
 from config.config_helper import load_test_config_json, get_screenshot_path
+from utils.driver_manager import Driver
 
 class BaseTest(unittest.TestCase):
 
@@ -15,7 +15,6 @@ class BaseTest(unittest.TestCase):
 
     def setUp(self):
         self.driver  = Driver().connect()
-        self.__screenshot_path = get_screenshot_path(platform.system())
         self.driver.get(self.test_config['baseUrl'])
         self.time_list = self.test_config['timeout_list']
 

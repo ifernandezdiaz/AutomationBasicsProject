@@ -5,5 +5,8 @@ from page_objects.header_page import HeaderPage
 
 class test_main_page_validations(BaseTest):
 
+
+
     def test_header_phone_validation(self):
-        self.assertEqual(HeaderPage(self.driver).get_phone(),'0123-456-789')
+        header_page = HeaderPage(self.driver)
+        self.assertEqual(header_page.get_phone(),'0123-456-789')

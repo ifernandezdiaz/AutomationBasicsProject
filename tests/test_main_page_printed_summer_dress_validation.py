@@ -5,5 +5,9 @@ from page_objects.body_page import BodyPage
 
 class test_main_page_printed_summer_dress_validation(BaseTest):
 
+
+
     def test_main_page_printed_summer_dress_validation(self):
-       self.assertEqual(BodyPage(self.driver).get_printed_summerdress_from_main_page(),'Printed Summer Dress')
+        body_page = BodyPage(self.driver)
+        self.assertEqual(body_page.get_printed_summerdress_from_main_page(),
+            'Printed Summer Dress')
