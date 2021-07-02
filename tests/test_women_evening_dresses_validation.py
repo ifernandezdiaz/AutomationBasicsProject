@@ -3,10 +3,10 @@ from selenium.webdriver.common.by import By
 from tests.base_test import BaseTest
 from page_objects.header_page import HeaderPage
 
-class test_main_page_validations(BaseTest):
+class test_women_evening_dresses_validation(BaseTest):
 
 
 
-    def test_header_phone_validation(self):
+    def test_women_evening_dresses_validation(self):
         header_page = HeaderPage(self.driver)
         self.assertEqual(header_page.get_phone(),'0123-456-789')
