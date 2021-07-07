@@ -4,17 +4,19 @@ import os
 import shutil
 import unittest
 import platform
+import logging
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from config.config_helper import load_test_config_json, get_screenshot_path
 from utils.driver_manager import Driver
+from config.logger_config import create_logger
 
 class BaseTest(unittest.TestCase):
 
     test_config = load_test_config_json()
 
     def setUp(self):
-        self.driver  = Driver().connect()
+        self.driver = Driver().connect()
         self.driver.get(self.test_config['baseUrl'])
         self.time_list = self.test_config['timeout_list']
 
@@ -31,3 +33,4 @@ class BaseTest(unittest.TestCase):
         self.__screenshot_path = get_screenshot_path(platform.system())
         shutil.rmtree(self.__screenshot_path)
         os.mkdir(self.__screenshot_path)
+        create_logger()

@@ -1,14 +1,13 @@
 import json
 import os
 import logging
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import WebDriverWait
+from config.config_helper import load_test_config_json
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
-from selenium.common.exceptions import NoSuchElementException
-from config.config_helper import load_test_config_json
-from selenium.webdriver.common.action_chains import ActionChains
 
 
 class BasePage:
@@ -17,6 +16,7 @@ class BasePage:
         test_settings = load_test_config_json()
         self.driver = driver
         self.time_list = test_settings['timeout_list']
+        self.logger = logging.getLogger('Debug_logger')
 
     def __hover_over(self):
         """
@@ -97,17 +97,23 @@ class BasePage:
         except TimeoutException:
             print('Element was not visible: ' + element_locator[1])
 
-    def click_element(self, element_locator):
+    def click_element(self, element_locator, web_element=False):
         """
-        Este método busca un elemento y lo clickea
+        Si le paso un element_locator como parametro, busca el elemento y lo clickea
+        Si le paso un webelement, simplemente lo clickeo
 
         Parameters:
         element_locator(tuple): By y el nombre del locator correspondiente
         """
-        element = self.find_element(element_locator)
-        element.click()
+        if web_element:
+            element_locator.click()
+        else:
+            element = self.find_element(element_locator)
+            element.click()
 
-    def wait_and_click(self, element_locator, time = 30):
+
+
+    def wait_and_click(self, element_locator, time=30):
         """
         Este método espera un determinado tiempo a que el elemento este visible,
         lo busca y lo clickea
@@ -116,11 +122,12 @@ class BasePage:
         element_locator(tuple): By y el nombre del locator correspondiente
         time(int): El tiempo que debe esperar
         """
-        self.wait_for_element_to_be_visible(time, element_locator)
+        self.wait_for_element_to_be_visible(element_locator, time)
         element = self.find_element(element_locator)
         element.click()
+        return element
 
-    def type_text(self, text, element_locator, enter=True):
+    def type_text(self, text, element_locator, enter=False):
         """
         Este método ingresa texto en un formulario
 
@@ -150,3 +157,11 @@ class BasePage:
         else:
             a = ActionChains(self.driver)
             a.move_to_element(element).perform()
+
+
+    def save_screenshot_of_element(self, element_locator, web_element=False):
+        if web_element:
+            element_locator.screenshot("/element.png")
+        else:
+            element = self.find_element(element_locator)
+            element.screenshot("/element.png")

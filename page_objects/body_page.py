@@ -1,3 +1,5 @@
+import time
+import logging
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from page_objects.base_page import BasePage
@@ -42,21 +44,28 @@ class BodyPage(BasePage):
     def get_menu_elements(self): #este método devuelve todos los elementos del menú
         return self.find_elements(self.menu_elements)
 
-    def get_menu_element_by_title(self,m_title): #este método devuelve dinámicamente un elemento del menú según el título que se pase por parámetro
+    def get_menu_element_by_title(self, m_title): #este método devuelve dinámicamente un elemento del menú según el título que se pase por parámetro
         elements = self.get_menu_elements()
         menuelement = None
         for elem in elements:
-            if elem.find_element(By.CSS_SELECTOR,'a').get_attribute(
-                "title")==m_title:
+            if elem.find_element(By.CSS_SELECTOR,'a').get_attribute("title") == m_title:
                 menuelement = elem
         return menuelement
 
-    def get_sub_menu_elements(self, m_title): #este método devuelve dinámicamente los subelementos del elemento del menu que se pase por parámetro
+    def get_sub_menu_elements(self, m_title):
+        """
+        Este método devuelve dinámicamente los subelementos
+        del elemento del menu que se pase por parámetro
+        """
+        self.logger.info(self.get_menu_element_by_title(m_title))
         return self.get_menu_element_by_title(m_title).find_elements(self.submenu_elements)
 
-    #este método devuelve dinámicamente un subelemento del elemento del menu
-    #segun el subelemento y el elemento que se pasen por parámetro
+
     def get_sub_menu_element_by_title(self, m_title, sm_title):
+        """
+        Este método devuelve dinámicamente un subelemento del elemento del menu
+        segun el subelemento y el elemento que se pasen por parámetro
+        """
         sm_elements = self.get_sub_menu_elements(m_title)
         sub_element = None
         for elem in sm_elements:
@@ -75,8 +84,11 @@ class BodyPage(BasePage):
         """
         return self.get_sub_menu_element_by_title(m_title, sm_title).find_elements(self.submenu_items)
 
-    #este metodo identifica un item del menu según su el valor del atributo titulo
+
     def compara_menuitem_por_atributo_titulo(elem, it_title):
+        """
+        Este metodo identifica un item del menu según su el valor del atributo titulo
+        """
         try:
             if elem.find_element(By.CSS_SELECTOR,'a').get_attribute("title")==it_title:
                 return True
@@ -85,15 +97,22 @@ class BodyPage(BasePage):
         except:
             pass
 
-    #este método devuelve dinámicamente un item del subelemento del menu
-    #segun el subelemento, el elemento y el item que se pasen por parámetro
-    def get_sub_menu_item_by_title(self,m_title,sm_title,it_title):
-        sm_items = self.get_sub_menu_items(m_title,sm_title)
-        sm_item = list(filter(lambda elem: BodyPage.compara_menuitem_por_atributo_titulo(elem,it_title),sm_items))
+
+    def get_sub_menu_item_by_title(self, m_title, sm_title, it_title):
+        """
+        Este método devuelve dinámicamente un item del subelemento del menu
+        segun el subelemento, el elemento y el item que se pasen por parámetro
+        """
+        sm_items = self.get_sub_menu_items(m_title, sm_title)
+        sm_item = list(filter(lambda elem: self.compara_menuitem_por_atributo_titulo(elem, it_title), sm_items))
         return sm_item
 
-    #este método devuelve el titulo del item Evening Dreses del subelemento del menu Dresess, del elemento del menu Women
     def get_women_dresses_evening_dresses_item(self):
+        """
+        Este método devuelve el titulo del item Evening Dreses del subelemento
+        del menu Dresess, del elemento return self.get_menu_element_by_title(m_title).find_elements(self.submenu_elements)
+        del menu Women
+        """
         return self.get_sub_menu_item_by_title('Women','Dresses','Evening Dresses')[0].find_element(By.CSS_SELECTOR,'a').get_attribute("title")
 
     #este método desplaza el mouse y hace click sobre el item Evening Dreses del subelemento del menu Dresess, del elemento del menu Women
