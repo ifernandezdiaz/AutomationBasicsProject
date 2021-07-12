@@ -1,6 +1,8 @@
 {
   "baseUrl": "http://automationpractice.com",
-  "timeout": 20,
-  "screenshot_dir": "/screenshots",
+  "timeout_list": {"very_low":5, "low":10, "medium":15,
+                   "high": 30, "very_high":60},
+  "screenshot_dir_windows": "\\screenshots",
+  "screenshot_dir_linux": "/screenshots",
   "browser": "chrome"
 }

@@ -3,33 +3,34 @@ import json
 import os
 import shutil
 import unittest
+import platform
+import logging
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from config.config_helper import load_test_config_json, get_screenshot_path
 from utils.driver_manager import Driver
+from config.logger_config import create_logger
 
 class BaseTest(unittest.TestCase):
 
+    test_config = load_test_config_json()
 
     def setUp(self):
-        self.driver  = Driver().connect()
-        with open(os.getcwd() + '/config/test_config.json') as test_config_file:
-            test_config = json.load(test_config_file)
-            test_config_file.close()
-        self.__screenshot_path = os.getcwd() + test_config['screenshot_dir']
-        self.driver.get(test_config['baseUrl'])
+        self.driver = Driver().connect()
+        self.driver.get(self.test_config['baseUrl'])
+        self.time_list = self.test_config['timeout_list']
 
     def tearDown(self):
         # Screenshots con nombre del test case relacionado
-        screenshot_file_name = self.__screenshot_path + '/Screenshot_' + unittest.TestCase.id(self) + '.png'
+        screenshot_file_name = self.__screenshot_path + \
+        '/Screenshot_' + unittest.TestCase.id(self) + '.png'
         self.driver.save_screenshot(screenshot_file_name)
         self.driver.close()
         self.driver.quit()
 
     @classmethod
     def setUpClass(self):
-        with open(os.getcwd() + '/config/test_config.json') as test_config_file:
-            test_config = json.load(test_config_file)
-            test_config_file.close()
-        self.__screenshot_path = os.getcwd() + test_config['screenshot_dir']
+        self.__screenshot_path = get_screenshot_path(platform.system())
         shutil.rmtree(self.__screenshot_path)
         os.mkdir(self.__screenshot_path)
+        create_logger()
