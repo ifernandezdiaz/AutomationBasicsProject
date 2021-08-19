@@ -122,7 +122,7 @@ class BasePage:
         element_locator(tuple): By y el nombre del locator correspondiente
         time(int): El tiempo que debe esperar
         """
-        self.wait_for_element_to_be_visible(element_locator, time)
+        self.wait_for_element_to_be_visible(element_locator, int(time))
         element = self.find_element(element_locator)
         element.click()
         return element
