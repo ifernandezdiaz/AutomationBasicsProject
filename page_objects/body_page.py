@@ -17,7 +17,7 @@ class BodyPage(BasePage):
         self.menu_elements = (By.CSS_SELECTOR,'#block_top_menu>ul>li')
         self.submenu_elements = (By.CSS_SELECTOR,'ul>li')
         self.submenu_items = (By.CSS_SELECTOR,'ul>li')
-        self.product_list_grid = (By.CSS_SELECTOR,'.product_list')
+        self.product_list_grid = (By.CSS_SELECTOR,'.product_list > li')
         self.main_page_popular_products = (By.CSS_SELECTOR,'#homefeatured > li.ajax_block_product')
         self.main_page_best_seller_tab = (By.CSS_SELECTOR,'#home-page-tabs .blockbestsellers')
         self.main_page_best_seller_product_list = (By.CSS_SELECTOR,'#blockbestsellers.product_list')
@@ -143,6 +143,12 @@ class BodyPage(BasePage):
     def click_women_dresses_evening_dresses_item(self):
         #el metodo hover_over es privado y por eso se invoca asi: _BasePage__hover_over
         self._BasePage__hover_over().move_to_element(self.get_menu_element_by_title('Women')).move_to_element(self.get_sub_menu_item_by_title('Women','Dresses','Evening Dresses')[0]).click().perform()
+        self.wait_for_element_to_be_visible(self.product_list_grid)
+
+    #este método hace click sobre el elemento del menu "Dresses"
+    def click_on_dresses_menu_element(self):
+
+        self.get_menu_element_by_title('Dresses').click()
         self.wait_for_element_to_be_visible(self.product_list_grid)
 
     #este método cuenta la cantidad de items que existen en la grilla de productos
