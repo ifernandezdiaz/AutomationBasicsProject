@@ -1,6 +1,7 @@
 from tests.base_test import BaseTest
 from page_objects.home_page import HomePage
 from page_objects.login_page import LoginPage
+import unittest
 
 class LoginTest(BaseTest):
 
