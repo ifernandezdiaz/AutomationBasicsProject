@@ -109,7 +109,7 @@ class BodyPage(BasePage):
         return self.get_sub_menu_element_by_title(m_title, sm_title).find_elements(*self.submenu_items)
 
 
-    def compara_menuitem_por_atributo_titulo(elem, it_title):
+    def compare_menu_item_by_title(elem, it_title):
         """
         Este metodo identifica un item del menu según su el valor del atributo titulo
         """
@@ -128,7 +128,7 @@ class BodyPage(BasePage):
         segun el subelemento, el elemento y el item que se pasen por parámetro
         """
         sm_items = self.get_sub_menu_items(m_title, sm_title)
-        sm_item = list(filter(lambda elem: BodyPage.compara_menuitem_por_atributo_titulo(elem, it_title), sm_items))
+        sm_item = list(filter(lambda elem: BodyPage.compare_menu_item_by_title(elem, it_title), sm_items))
         return sm_item
 
     def get_women_dresses_evening_dresses_item(self):
@@ -151,13 +151,17 @@ class BodyPage(BasePage):
         self.get_menu_element_by_title('Dresses').click()
         self.wait_for_element_to_be_visible(self.product_list_grid)
 
+    #este método devuelve la lista de items que existen en la grilla de productos
+    def get_grid_list(self):
+        return self.find_elements(self.product_list_grid)
+
     #este método cuenta la cantidad de items que existen en la grilla de productos
     def get_grid_list_count(self):
         return len(self.find_elements(self.product_list_grid))
 
     def get_popular_product_from_main_page(self,it_title):
         popular_prods = self.find_elements(self.main_page_popular_products)
-        pop_prod = list(filter(lambda elem: BodyPage.compara_menuitem_por_atributo_titulo(elem,it_title),popular_prods))
+        pop_prod = list(filter(lambda elem: BodyPage.compare_menu_item_by_title(elem,it_title),popular_prods))
         return pop_prod
 
     def get_printed_summerdress_from_main_page(self):
@@ -214,3 +218,32 @@ class BodyPage(BasePage):
     def click_register(self):
         self.wait_for_element_to_be_visible(self.customer_myaccount)
         return self.find_element(self.customer_myaccount).text
+
+    def compare_grid_item_by_title(elem, it_title):
+        """
+        Este metodo identifica un item de la grilla según su el valor del atributo titulo
+        """
+        try:
+            if elem.find_element(By.CSS_SELECTOR,'a').get_attribute("title")==it_title:
+                return True
+            else:
+                return False
+        except:
+            pass
+
+    def get_grid_item_by_title(self, it_title):
+        """
+        Este método devuelve dinámicamente un item de la grilla según el titulo que se pase por parámetro
+        """
+        sm_items = self.get_grid_list()
+        sm_item = list(filter(lambda elem: BodyPage.compare_grid_item_by_title(elem, it_title), sm_items))
+        return sm_item
+
+    def get_printed_dress_grid_item(self):
+        """
+        Este metodo devuelve el item de la grilla cuyo titulo es "Printed Dress"
+        """
+        return self.get_grid_item_by_title('Printed Dress')
+
+    def get_item_price(self, item):
+        return item[0].find_element(By.CSS_SELECTOR,'.right-block .content_price').text
